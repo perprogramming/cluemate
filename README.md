@@ -11,3 +11,10 @@ Computer Science at the [Bonn-Rhein-Sieg University of Applied Science](http://w
 
 Cluemate is written in [SWI-Prolog](http://www.swi-prolog.org/), an open source implementation of the declarative programming language Prolog.
 
+
+Installation
+============
+
+After cloning the repository, you can compile the cluemate executable by running ./compile.  
+The compilation requires the swipl binary in the current PATH (Version 6.2). Afterwards you
+can start Cluemate by running: ./cluemate
