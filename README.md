@@ -26,7 +26,7 @@ Clone the source code:
 git clone https://github.com/perprogramming/cluemate.git
 ```
 
-After cloning the repository, you can compile the cluemate and start it right away:
+After cloning the repository, you can compile cluemate and start it right away:
 ```bash
 ./compile
 ./cluemate
