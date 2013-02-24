@@ -15,8 +15,8 @@ Cluemate is written in [SWI-Prolog](http://www.swi-prolog.org/), an open source 
 Installation
 ============
 
-First make sure you have SWI-Prolog installed in Version 6.2 or higher and it's binary swipl
-is in the current PATH. On Mac OSX SWI-Prolog is available via [Macports](http://www.macports.org/):
+First make sure you have SWI-Prolog installed in Version 6.2 or higher and it's binary swipl is in the current PATH.  
+On Mac OSX SWI-Prolog is available via [Macports](http://www.macports.org/):
 ```bash
 sudo port install swi-prolog
 ```
