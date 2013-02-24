@@ -15,6 +15,19 @@ Cluemate is written in [SWI-Prolog](http://www.swi-prolog.org/), an open source 
 Installation
 ============
 
-After cloning the repository, you can compile the cluemate executable by running ./compile.  
-The compilation requires the swipl binary in the current PATH (Version 6.2). Afterwards you
-can start Cluemate by running: ./cluemate
+First make sure you have SWI-Prolog installed in Version 6.2 or higher and it's binary swipl
+is in the current PATH. On Mac OSX SWI-Prolog is available via [Macports](http://www.macports.org/):
+```bash
+sudo port install swi-prolog
+```
+
+Clone the source code:
+```bash
+git clone https://github.com/perprogramming/cluemate.git
+```
+
+After cloning the repository, you can compile the cluemate and start it right away:
+```bash
+./compile
+./cluemate
+```
