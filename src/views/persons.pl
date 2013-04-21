@@ -4,19 +4,10 @@
 
 :- use_module(library(lists)).
 :- use_module('../model/persons').
+:- use_module('util').
 
 render_persons([]) :-
 	!.
 
 render_persons(Persons) :-
-	tab(2), writeln('Persons:'),
-	render_persons_recursively(Persons).
-
-render_persons_recursively([]) :-
-	!.
-
-render_persons_recursively(Persons) :-
-	nth0(0, Persons, Person, RemainingPersons),
-	get_name(Person, Name),
-	tab(2), writeln(Name),
-	render_persons_recursively(RemainingPersons).
+	render_list('Persons', persons_model:get_person_name, Persons).	

@@ -5,6 +5,8 @@
 :- use_module('../model/game').
 :- use_module('actions').
 :- use_module('persons').
+:- use_module('weapons').
+:- use_module('rooms').
 :- use_module('util').
 
 render_game(Game, Flash, Exit) :-
@@ -44,8 +46,12 @@ render_game_status(Game) :-
 render_game_details(Game) :-
 	is_game(Game),
 	!,
-	get_persons(Game, Persons),
-	render_persons(Persons).
+	get_persons(Game, Persons),	
+	render_persons(Persons),
+	get_weapons(Game, Weapons),
+	render_weapons(Weapons),
+	get_rooms(Game, Rooms),
+	render_rooms(Rooms).
 	
 render_game_details(Game) :-
 	!.
