@@ -6,7 +6,8 @@
 :- use_module(library(record)).
 
 :- record weapon(
-	name:text=''
+	name:text='',
+	seen:boolean=false
 ).
 
 create_weapon(Weapon, Name) :-

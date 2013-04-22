@@ -6,7 +6,8 @@
 :- use_module(library(record)).
 
 :- record person(
-	name:text=''
+	name:text='',
+	seen:boolean=false
 ).
 
 create_person(Person, Name) :-

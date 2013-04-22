@@ -6,7 +6,8 @@
 :- use_module(library(record)).
 
 :- record room(
-	name:text=''
+	name:text='',
+	suspicious:boolean=true
 ).
 
 create_room(Room, Name) :-
@@ -16,3 +17,6 @@ create_room(Room, Name) :-
 		
 get_room_name(Room, Name) :-
 	room_name(Room, Name).
+	
+is_room_suspicious(Room) :-
+	room_suspicious(Room, true).

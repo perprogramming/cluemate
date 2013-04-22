@@ -17,11 +17,17 @@
 	can_add_room/1,
 	add_room/3,
 	add_rooms/3,
-	get_rooms/2	
+	get_rooms/2,
+	get_suspicious_rooms/2,
+	get_room_by_name/3,
+	set_current_room/3,
+	get_current_room/2,
+	is_curret_room/2
 ]).
 
 :- use_module(library(record)).
 :- use_module(library(lists)).
+:- use_module('util').
 :- use_module('persons').
 :- use_module('weapons').
 :- use_module('rooms').
@@ -30,7 +36,8 @@
 	started:boolean=false,
 	persons:list=[],
 	weapons:list=[],
-	rooms:list=[]
+	rooms:list=[],
+	currentroom=false
 ).
 
 is_game(false) :-
@@ -115,4 +122,31 @@ add_room(Game, Name, NewGame) :-
 	
 get_rooms(Game, Rooms) :-
 	game_rooms(Game, Rooms).
+
+get_suspicious_rooms(Game, SuspiciousRooms) :-
+	get_rooms(Game, Rooms),
+	filter_list(rooms_model:is_room_suspicious, Rooms, SuspiciousRooms).
 	
+set_current_room(Game, Room, NewGame) :-
+	set_currentroom_of_game(Room, Game, NewGame).
+
+get_room_by_name(Game, Name, Room) :-
+	get_rooms(Game, Rooms),
+	find_list_element(game_model:compare_room_name(Name), Rooms, Room),
+	!.
+	
+get_room_by_name(Game, Name, false).
+
+compare_room_name(Name, Room) :-
+	get_room_name(Room, Name),
+	!.
+	
+compare_room_name(Name, Room) :-
+	false,
+	!.
+
+get_current_room(Game, Room) :-
+	game_currentroom(Game, Room).
+	
+is_current_room(Game, Room) :-
+	game_currentroom(Game, Room). 	

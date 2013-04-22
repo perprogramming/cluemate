@@ -14,10 +14,6 @@ offer_game_action('c', Game, 'Create a new game') :-
 offer_game_action('s', Game, 'Start the game') :-
 	can_start_game(Game).
 
-offer_game_action('e', Game, 'End the game') :-
-	is_game(Game),
-	can_end_game(Game).
-	
 offer_game_action('ap', Game, 'Add a person') :-
 	can_add_person(Game).
 	
@@ -26,7 +22,14 @@ offer_game_action('aw', Game, 'Add a weapon') :-
 
 offer_game_action('ar', Game, 'Add a room') :-
 	can_add_room(Game).
-	
+
+offer_game_action('g', Game, 'Go to room') :-
+	is_game_started(Game).
+
+offer_game_action('e', Game, 'End the game') :-
+	is_game(Game),
+	can_end_game(Game).
+		
 offer_game_action('x', Game, 'Exit').
 
 execute_game_action('classic', Game, NewGame, 'You have just created and started a classic game!', false) :-
@@ -78,7 +81,7 @@ execute_game_action('e', Game, NewGame, 'You have just stopped the game!', false
 execute_game_action('ap', Game, NewGame, Flash, false) :-
 	can_add_person(Game),
 	!,
-	prompt1("Please enter the name of the person (in quotes): "),
+	prompt1('Please enter the name of the person (in quotes): '),
 	read(Name),
 	add_person(Game, Name, NewGame),
 	string_concat('You have just added person ', Name, Temp),
@@ -87,7 +90,7 @@ execute_game_action('ap', Game, NewGame, Flash, false) :-
 execute_game_action('aw', Game, NewGame, Flash, false) :-
 	can_add_weapon(Game),
 	!,
-	prompt1("Please enter the name of the weapon (in quotes): "),
+	prompt1('Please enter the name of the weapon (in quotes): '),
 	read(Name),
 	add_weapon(Game, Name, NewGame),
 	string_concat('You have just added weapon ', Name, Temp),
@@ -96,11 +99,27 @@ execute_game_action('aw', Game, NewGame, Flash, false) :-
 execute_game_action('ar', Game, NewGame, Flash, false) :-
 	can_add_weapon(Game),
 	!,
-	prompt1("Please enter the name of the room (in quotes): "),
+	prompt1('Please enter the name of the room (in quotes): '),
 	read(Name),
 	add_room(Game, Name, NewGame),
 	string_concat('You have just added room ', Name, Temp),
 	string_concat(Temp, '!', Flash).
+
+execute_game_action('g', Game, NewGame, Flash, false) :-
+	is_game_started(Game),
+	!,
+	prompt1('Please enter the name of the room (in quotes): '),
+	read(Name),
+	get_room_by_name(Game, Name, Room),
+	((
+		Room=false,
+		Flash='Room not found!',
+		NewGame=Game
+	 ) ; (
+		set_current_room(Game, Room, NewGame),
+		string_concat('You have just gone to room ', Name, Temp),
+		string_concat(Temp, '!', Flash)
+	)).
 
 execute_game_action('x', Game, Game, 'Thanks for using Cluemate and Goodbye!', true) :-
 	!.
