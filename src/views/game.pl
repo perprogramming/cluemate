@@ -4,6 +4,8 @@
 
 :- use_module('../model/game').
 :- use_module('../model/rooms').
+:- use_module('../model/persons').
+:- use_module('../model/weapons').
 :- use_module('actions').
 :- use_module('util').
 
@@ -24,6 +26,7 @@ render_game(Game, Flash, Exit) :-
 		render_available_items(Game),
 		render_suspicious_items(Game),
 		render_suggestions(Game),
+		render_proven(Game),
 		render_actions(Game)
 	)).
 	
@@ -36,7 +39,7 @@ render_game_status(Game) :-
 	is_game(Game),	
 	not(is_game_started(Game)),
 	!,
-	tab(2), writeln('The game is not started.').
+	tab(2), writeln('The game is not started. You have to add at least two persons, two weapons and two rooms to be able to start the game.').
 	
 render_game_status(Game) :-
 	is_game(Game),
@@ -86,9 +89,9 @@ render_suspicious_items(Game) :-
 	is_game_started(Game),
 	!,
 	tab(2), writeln('SUSPICIOUS'),
-	get_persons(Game, SuspiciousPersons),	
+	get_suspicious_persons(Game, SuspiciousPersons),	
 	render_list('Persons', persons_model:get_person_name, SuspiciousPersons),
-	get_weapons(Game, SuspiciousWeapons),
+	get_suspicious_weapons(Game, SuspiciousWeapons),
 	render_list('Weapons', weapons_model:get_weapon_name, SuspiciousWeapons),
 	get_suspicious_rooms(Game, SuspiciousRooms),
 	render_list('Rooms', rooms_model:get_room_name, SuspiciousRooms),
@@ -109,4 +112,39 @@ render_suggestions(Game) :-
 	
 render_suggestions(Game) :-
 	!.
+
+render_proven(Game) :-
+	is_game(Game),
+	is_game_started(Game),
+	!,
+	tab(2), writeln('PROVEN'),
+	((
+		get_murder(Game, Murder),
+		not(Murder=false),
+		get_person_name(Murder, MurderName),
+		tab(2), write('The murder is '), write(MurderName), writeln('.')
+	) ; (
+		tab(2), writeln('The murder is not clear yet.')
+	)),
+	((
+		get_murder_weapon(Game, MurderWeapon),
+		not(MurderWeapon=false),
+		get_weapon_name(MurderWeapon, MurderWeaponName),
+		tab(2), write('The murder weapon is '), write(MurderWeaponName), writeln('.')
+	) ; (
+		tab(2), writeln('The murder weapon is not clear yet.')
+	)),
+	((
+		get_crime_scene(Game, CrimeScene),
+		not(CrimeScene=false),
+		get_room_name(CrimeScene, CrimeSceneName),
+		tab(2), write('The crime scene is '), write(CrimeSceneName), writeln('.')
+	) ; (
+		tab(2), writeln('The crime scene is not clear yet.')
+	)),
+	nl.
+	
+render_proven(Game) :-
+	!.
+	
 	

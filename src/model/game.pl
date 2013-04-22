@@ -10,20 +10,26 @@
 	add_person/3,
 	add_persons/3,
 	get_persons/2,
+	get_suspicious_persons/2,
+	mark_person_by_name/3,
+	get_murder/2,
 	can_add_weapon/1,
 	add_weapon/3,
 	add_weapons/3,
 	get_weapons/2,
+	get_suspicious_weapons/2,
+	mark_weapon_by_name/3,
+	get_murder_weapon/2,
 	can_add_room/1,
 	add_room/3,
 	add_rooms/3,
 	get_rooms/2,
 	get_suspicious_rooms/2,
-	get_room_by_name/3,
-	set_current_room/3,
+	set_current_room_by_name/3,
 	get_current_room/2,
-	is_curret_room/2,
-	get_next_room/2
+	get_next_room/2,
+	mark_room_by_name/3,
+	get_crime_scene/2
 ]).
 
 :- use_module(library(record)).
@@ -51,7 +57,16 @@ create_game(Game) :-
 
 can_start_game(Game) :-
 	is_game(Game),
-	not(is_game_started(Game)).
+	not(is_game_started(Game)),
+	get_persons(Game, Persons),
+	proper_length(Persons, NumberOfPersons),
+	NumberOfPersons > 1,
+	get_weapons(Game, Weapons),
+	proper_length(Weapons, NumberOfWeapons),
+	NumberOfWeapons > 1,
+	get_rooms(Game, Rooms),
+	proper_length(Rooms, NumberOfRooms),
+	NumberOfRooms > 1.
 	
 can_end_game(Game) :-
 	is_game(Game).
@@ -65,7 +80,8 @@ start_game(Game, NewGame) :-
 end_game(Game, false).
 	
 can_add_person(Game) :-
-	can_start_game(Game).
+	is_game(Game),
+	not(is_game_started(Game)).
 	
 add_persons(Game, [], Game) :-
 	!.
@@ -79,13 +95,49 @@ add_person(Game, Name, NewGame) :-
 	create_person(Person, Name),
 	game_persons(Game, Persons),
 	append(Persons, [Person], NewPersons),
-	set_persons_of_game(NewPersons, Game, NewGame).
+	sort(NewPersons, SortedPersons),
+	set_persons_of_game(SortedPersons, Game, NewGame).
 	
 get_persons(Game, Persons) :-
 	game_persons(Game, Persons).
+
+get_suspicious_persons(Game, SuspiciousPersons) :-
+	get_persons(Game, Persons),
+	filter_list(persons_model:is_person_suspicious, Persons, SuspiciousPersons).
+
+mark_person_by_name(Game, Name, NewGame) :-
+	get_persons(Game, Persons),
+	find_list_element(game_model:compare_person_name(Name), Persons, Person),
+	exclude(=(Person), Persons, OtherPersons),
+	set_person_suspicious(Person, false, UnsuspiciousPerson),
+	append(OtherPersons, [UnsuspiciousPerson], NewPersons),
+	sort(NewPersons, SortedPersons),
+	set_persons_of_game(SortedPersons, Game, NewGame).
+
+mark_person_by_name(Game, Name, NewGame) :-
+	!,
+	false.
+
+compare_person_name(Name, Person) :-
+	get_person_name(Person, Name),
+	!.
+	
+compare_person_name(Name, Person) :-
+	false,
+	!.
+
+get_murder(Game, Murder) :-
+	get_suspicious_persons(Game, SuspiciousPersons),
+	proper_length(SuspiciousPersons, 1),
+	nth0(0, SuspiciousPersons, Murder),
+	!.
+
+get_murder(Game, false) :-
+	!.
 	
 can_add_weapon(Game) :-
-	can_start_game(Game).
+	is_game(Game),
+	not(is_game_started(Game)).
 	
 add_weapons(Game, [], Game) :-
 	!.
@@ -99,13 +151,49 @@ add_weapon(Game, Name, NewGame) :-
 	create_weapon(Weapon, Name),
 	game_weapons(Game, Weapons),
 	append(Weapons, [Weapon], NewWeapons),
-	set_weapons_of_game(NewWeapons, Game, NewGame).
+	sort(NewWeapons, SortedWeapons),
+	set_weapons_of_game(SortedWeapons, Game, NewGame).
 	
 get_weapons(Game, Weapons) :-
 	game_weapons(Game, Weapons).
 
+get_suspicious_weapons(Game, SuspiciousWeapons) :-
+	get_weapons(Game, Weapons),
+	filter_list(weapons_model:is_weapon_suspicious, Weapons, SuspiciousWeapons).
+	
+get_murder_weapon(Game, MurderWeapon) :-
+	get_suspicious_weapons(Game, SuspiciousWeapons),
+	proper_length(SuspiciousWeapons, 1),
+	nth0(0, SuspiciousWeapons, MurderWeapon),
+	!.
+
+mark_weapon_by_name(Game, Name, NewGame) :-
+	get_weapons(Game, Weapons),
+	find_list_element(game_model:compare_weapon_name(Name), Weapons, Weapon),
+	exclude(=(Weapon), Weapons, OtherWeapons),
+	set_weapon_suspicious(Weapon, false, UnsuspiciousWeapon),
+	append(OtherWeapons, [UnsuspiciousWeapon], NewWeapons),
+	sort(NewWeapons, SortedWeapons),
+	set_weapons_of_game(SortedWeapons, Game, NewGame).
+
+mark_weapon_by_name(Game, Name, NewGame) :-
+	!,
+	false.
+
+compare_weapon_name(Name, Weapon) :-
+	get_weapon_name(Weapon, Name),
+	!.
+	
+compare_weapon_name(Name, Weapon) :-
+	false,
+	!.
+
+get_murder_weapon(Game, false) :-
+	!.
+	
 can_add_room(Game) :-
-	can_start_game(Game).
+	is_game(Game),
+	not(is_game_started(Game)).
 	
 add_rooms(Game, [], Game) :-
 	!.
@@ -119,7 +207,8 @@ add_room(Game, Name, NewGame) :-
 	create_room(Room, Name),
 	game_rooms(Game, Rooms),
 	append(Rooms, [Room], NewRooms),
-	set_rooms_of_game(NewRooms, Game, NewGame).
+	sort(NewRooms, SortedRooms),
+	set_rooms_of_game(SortedRooms, Game, NewGame).
 	
 get_rooms(Game, Rooms) :-
 	game_rooms(Game, Rooms).
@@ -128,15 +217,15 @@ get_suspicious_rooms(Game, SuspiciousRooms) :-
 	get_rooms(Game, Rooms),
 	filter_list(rooms_model:is_room_suspicious, Rooms, SuspiciousRooms).
 	
-set_current_room(Game, Room, NewGame) :-
-	set_currentroom_of_game(Room, Game, NewGame).
-
-get_room_by_name(Game, Name, Room) :-
+set_current_room_by_name(Game, Name, NewGame) :-
 	get_rooms(Game, Rooms),
 	find_list_element(game_model:compare_room_name(Name), Rooms, Room),
+	set_currentroom_of_game(Room, Game, NewGame),
 	!.
 	
-get_room_by_name(Game, Name, false).
+set_current_room_by_name(Game, Name, false) :-
+	!,
+	false.
 
 compare_room_name(Name, Room) :-
 	get_room_name(Room, Name),
@@ -149,9 +238,6 @@ compare_room_name(Name, Room) :-
 get_current_room(Game, Room) :-
 	game_currentroom(Game, Room).
 	
-is_current_room(Game, Room) :-
-	game_currentroom(Game, Room).
-	
 get_next_room(Game, Room) :-
 	get_suspicious_rooms(Game, SuspiciousRooms),
 	nth0(0, SuspiciousRooms, Room),
@@ -160,3 +246,25 @@ get_next_room(Game, Room) :-
 get_next_room(Game, Room) :-
 	get_rooms(Game, Rooms),
 	nth0(0, Rooms, Room).
+
+mark_room_by_name(Game, Name, NewGame) :-
+	get_rooms(Game, Rooms),
+	find_list_element(game_model:compare_room_name(Name), Rooms, Room),
+	exclude(=(Room), Rooms, OtherRooms),
+	set_room_suspicious(Room, false, UnsuspiciousRoom),
+	append(OtherRooms, [UnsuspiciousRoom], NewRooms),
+	sort(NewRooms, SortedRooms),
+	set_rooms_of_game(SortedRooms, Game, NewGame).
+
+mark_room_by_name(Game, Name, NewGame) :-
+	!,
+	false.
+
+get_crime_scene(Game, CrimeScene) :-
+	get_suspicious_rooms(Game, SuspiciousRooms),
+	proper_length(SuspiciousRooms, 1),
+	nth0(0, SuspiciousRooms, CrimeScene),
+	!.
+	
+get_crime_scene(Game, false) :-
+	!.
