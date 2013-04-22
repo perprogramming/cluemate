@@ -101,8 +101,11 @@ render_suggestions(Game) :-
 	is_game(Game),
 	is_game_started(Game),
 	!,
-	tab(2), writeln('SUGGESTIONS').	
-	
+	tab(2), writeln('SUGGESTIONS'),
+	get_next_room(Game, NextRoom),
+	get_room_name(NextRoom, Name),
+	tab(2), write('The next room you should visit is: '), write(Name), writeln('.'),
+	nl.
 	
 render_suggestions(Game) :-
 	!.

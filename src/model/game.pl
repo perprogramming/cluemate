@@ -22,7 +22,8 @@
 	get_room_by_name/3,
 	set_current_room/3,
 	get_current_room/2,
-	is_curret_room/2
+	is_curret_room/2,
+	get_next_room/2
 ]).
 
 :- use_module(library(record)).
@@ -149,4 +150,13 @@ get_current_room(Game, Room) :-
 	game_currentroom(Game, Room).
 	
 is_current_room(Game, Room) :-
-	game_currentroom(Game, Room). 	
+	game_currentroom(Game, Room).
+	
+get_next_room(Game, Room) :-
+	get_suspicious_rooms(Game, SuspiciousRooms),
+	nth0(0, SuspiciousRooms, Room),
+	not(Room=false).
+	
+get_next_room(Game, Room) :-
+	get_rooms(Game, Rooms),
+	nth0(0, Rooms, Room).
