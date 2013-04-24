@@ -20,5 +20,4 @@ mainloop(Game, Flash, Exit) :-
 	read(Action),	
 	
 	execute_game_action(Action, Game, NewGame, NewFlash, NewExit),
-	writeln(NewExit),
 	mainloop(NewGame, NewFlash, NewExit).
