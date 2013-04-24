@@ -29,7 +29,10 @@
 	get_current_room/2,
 	get_next_room/2,
 	mark_room_by_name/3,
-	get_crime_scene/2
+	get_crime_scene/2,
+	get_most_suspicious_person/2,
+	get_most_suspicious_weapon/2,
+	get_most_suspicious_room/2
 ]).
 
 :- use_module(library(record)).
@@ -240,13 +243,8 @@ get_current_room(Game, Room) :-
 	
 get_next_room(Game, Room) :-
 	get_suspicious_rooms(Game, SuspiciousRooms),
-	nth0(0, SuspiciousRooms, Room),
-	not(Room=false).
+	nth0(0, SuspiciousRooms, Room).
 	
-get_next_room(Game, Room) :-
-	get_rooms(Game, Rooms),
-	nth0(0, Rooms, Room).
-
 mark_room_by_name(Game, Name, NewGame) :-
 	get_rooms(Game, Rooms),
 	find_list_element(game_model:compare_room_name(Name), Rooms, Room),
@@ -268,3 +266,18 @@ get_crime_scene(Game, CrimeScene) :-
 	
 get_crime_scene(Game, false) :-
 	!.
+	
+get_most_suspicious_person(Game, Person) :-
+	!,
+	get_suspicious_persons(Game, SuspiciousPersons),
+	nth0(0, SuspiciousPersons, Person).
+	
+get_most_suspicious_weapon(Game, Weapon) :-
+	!,
+	get_suspicious_weapons(Game, SuspiciousWeapons),
+	nth0(0, SuspiciousWeapons, Weapon).
+	
+get_most_suspicious_room(Game, Room) :-
+	!,
+	get_suspicious_rooms(Game, SuspiciousRooms),
+	nth0(0, SuspiciousRooms, Room).
