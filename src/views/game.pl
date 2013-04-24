@@ -108,7 +108,7 @@ render_suggestions(Game) :-
 	
 	get_next_room(Game, NextRoom),
 	get_room_name(NextRoom, Name),
-	tab(2), write('The next room you should visit is: '), write(Name), writeln('.'),
+	tab(2), write('The next room you could visit is: '), write(Name), writeln('.'),
 
 	get_most_suspicious_person(Game, MostSuspiciousPerson),
 	get_most_suspicious_weapon(Game, MostSuspiciousWeapon),
@@ -116,7 +116,7 @@ render_suggestions(Game) :-
 	get_person_name(MostSuspiciousPerson, MostSuspiciousPersonName),
 	get_weapon_name(MostSuspiciousWeapon, MostSuspiciousWeaponName),
 	get_room_name(MostSuspiciousRoom, MostSuspiciousRoomName),
-	tab(2), write('The next question you should ask is: '), write(MostSuspiciousPersonName), write(', '), write(MostSuspiciousWeaponName), write(' and '), write(MostSuspiciousRoomName), writeln('.'),
+	tab(2), write('The next question you could ask is: '), write(MostSuspiciousPersonName), write(', '), write(MostSuspiciousWeaponName), write(' and '), write(MostSuspiciousRoomName), writeln('.'),
 	nl.
 	
 render_suggestions(Game) :-
