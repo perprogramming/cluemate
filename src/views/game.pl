@@ -10,7 +10,7 @@
 :- use_module('util').
 
 render_game(Game, Flash) :-
-    tty_clear,
+	tty_clear,
 	nl,
 	tab(2), writeln('C L U E M A T E'),
 	render_line('-'),
