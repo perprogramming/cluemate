@@ -10,15 +10,12 @@
 :- use_module('util').
 
 render_game(Game, Flash) :-
-	!,
 	nl,
 	tab(2), writeln('C L U E M A T E'),
 	render_line('-'),
-	
 	tab(2), writeln(Flash),
 	render_line('-'),
 	nl,
-	
 	render_game_status(Game),
 	render_current_room(Game),
 	nl,

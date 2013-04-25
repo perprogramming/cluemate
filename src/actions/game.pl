@@ -116,7 +116,7 @@ execute_game_action('e', Game, NewGame, 'You have just stopped the game!', false
 execute_game_action('ap', Game, NewGame, Flash, false) :-
 	can_add_person(Game),
 	!,
-	prompt1('Please enter the name of the person (in quotes): '),
+	tab(2), prompt1('Please enter the name of the person (in quotes): '),
 	read(Name),
 	add_person(Game, Name, NewGame),
 	string_concat('You have just added person ', Name, Temp),
@@ -125,7 +125,7 @@ execute_game_action('ap', Game, NewGame, Flash, false) :-
 execute_game_action('aw', Game, NewGame, Flash, false) :-
 	can_add_weapon(Game),
 	!,
-	prompt1('Please enter the name of the weapon (in quotes): '),
+	tab(2), prompt1('Please enter the name of the weapon (in quotes): '),
 	read(Name),
 	add_weapon(Game, Name, NewGame),
 	string_concat('You have just added weapon ', Name, Temp),
@@ -134,7 +134,7 @@ execute_game_action('aw', Game, NewGame, Flash, false) :-
 execute_game_action('ar', Game, NewGame, Flash, false) :-
 	can_add_weapon(Game),
 	!,
-	prompt1('Please enter the name of the room (in quotes): '),
+	tab(2), prompt1('Please enter the name of the room (in quotes): '),
 	read(Name),
 	add_room(Game, Name, NewGame),
 	string_concat('You have just added room ', Name, Temp),
@@ -145,7 +145,7 @@ execute_game_action('mp', Game, NewGame, Flash, false) :-
 	get_murder(Game, Murder),
 	Murder=false,
 	!,
-	prompt1('Please enter the name of the person (in quotes): '),
+	tab(2), prompt1('Please enter the name of the person (in quotes): '),
 	read(Name),
 	((
 		mark_person_by_name(Game, Name, NewGame),
@@ -161,7 +161,7 @@ execute_game_action('mw', Game, NewGame, Flash, false) :-
 	get_murder_weapon(Game, MurderWeapon),
 	MurderWeapon=false,
 	!,
-	prompt1('Please enter the name of the weapon (in quotes): '),
+	tab(2), prompt1('Please enter the name of the weapon (in quotes): '),
 	read(Name),
 	((
 		mark_weapon_by_name(Game, Name, NewGame),
@@ -177,7 +177,7 @@ execute_game_action('mr', Game, NewGame, Flash, false) :-
 	get_crime_scene(Game, CrimeScene),
 	CrimeScene=false,
 	!,
-	prompt1('Please enter the name of the room (in quotes): '),
+	tab(2), prompt1('Please enter the name of the room (in quotes): '),
 	read(Name),
 	((
 		mark_room_by_name(Game, Name, NewGame),
@@ -191,7 +191,7 @@ execute_game_action('mr', Game, NewGame, Flash, false) :-
 execute_game_action('g', Game, NewGame, Flash, false) :-
 	is_game_started(Game),
 	!,
-	prompt1('Please enter the name of the room (in quotes): '),
+	tab(2), prompt1('Please enter the name of the room (in quotes): '),
 	read(Name),
 	((
 		set_current_room_by_name(Game, Name, NewGame),
