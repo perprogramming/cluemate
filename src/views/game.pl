@@ -1,5 +1,5 @@
 :- module(game_views, [
-	render_game/3
+	render_game/2
 ]).
 
 :- use_module('../model/game').
@@ -9,7 +9,7 @@
 :- use_module('actions').
 :- use_module('util').
 
-render_game(Game, Flash, Exit) :-
+render_game(Game, Flash) :-
 	!,
 	nl,
 	tab(2), writeln('C L U E M A T E'),
@@ -19,16 +19,14 @@ render_game(Game, Flash, Exit) :-
 	render_line('-'),
 	nl,
 	
-	(Exit ; (
-		render_game_status(Game),
-		render_current_room(Game),
-		nl,
-		render_available_items(Game),
-		render_suspicious_items(Game),
-		render_suggestions(Game),
-		render_proven(Game),
-		render_actions(Game)
-	)).
+	render_game_status(Game),
+	render_current_room(Game),
+	nl,
+	render_available_items(Game),
+	render_suspicious_items(Game),
+	render_suggestions(Game),
+	render_proven(Game),
+	render_actions(Game).
 	
 render_game_status(Game) :-
 	not(is_game(Game)),
