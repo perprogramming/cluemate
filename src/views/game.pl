@@ -10,6 +10,7 @@
 :- use_module('util').
 
 render_game(Game, Flash) :-
+    tty_clear,
 	nl,
 	tab(2), writeln('C L U E M A T E'),
 	render_line('-'),
@@ -23,7 +24,8 @@ render_game(Game, Flash) :-
 	render_suspicious_items(Game),
 	render_suggestions(Game),
 	render_proven(Game),
-	render_actions(Game).
+	render_actions(Game),
+	nl.
 	
 render_game_status(Game) :-
 	not(is_game(Game)),

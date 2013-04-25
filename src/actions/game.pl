@@ -3,6 +3,7 @@
 	execute_game_action/5
 ]).
 
+:- use_module('util').
 :- use_module('../model/game').
 
 offer_game_action('classic', Game, 'Create and start a classic game') :-
@@ -116,8 +117,7 @@ execute_game_action('e', Game, NewGame, 'You have just stopped the game!', false
 execute_game_action('ap', Game, NewGame, Flash, false) :-
 	can_add_person(Game),
 	!,
-	tab(2), prompt1('Please enter the name of the person (in quotes): '),
-	read(Name),
+	read_user_input('Please enter the name of the person (in quotes): ', Name),
 	add_person(Game, Name, NewGame),
 	string_concat('You have just added person ', Name, Temp),
 	string_concat(Temp, '!', Flash).
@@ -125,8 +125,7 @@ execute_game_action('ap', Game, NewGame, Flash, false) :-
 execute_game_action('aw', Game, NewGame, Flash, false) :-
 	can_add_weapon(Game),
 	!,
-	tab(2), prompt1('Please enter the name of the weapon (in quotes): '),
-	read(Name),
+	read_user_input('Please enter the name of the weapon (in quotes): ', Name),
 	add_weapon(Game, Name, NewGame),
 	string_concat('You have just added weapon ', Name, Temp),
 	string_concat(Temp, '!', Flash).
@@ -134,8 +133,7 @@ execute_game_action('aw', Game, NewGame, Flash, false) :-
 execute_game_action('ar', Game, NewGame, Flash, false) :-
 	can_add_weapon(Game),
 	!,
-	tab(2), prompt1('Please enter the name of the room (in quotes): '),
-	read(Name),
+	read_user_input('Please enter the name of the room (in quotes): ', Name),
 	add_room(Game, Name, NewGame),
 	string_concat('You have just added room ', Name, Temp),
 	string_concat(Temp, '!', Flash).
@@ -145,8 +143,7 @@ execute_game_action('mp', Game, NewGame, Flash, false) :-
 	get_murder(Game, Murder),
 	Murder=false,
 	!,
-	tab(2), prompt1('Please enter the name of the person (in quotes): '),
-	read(Name),
+	read_user_input('Please enter the name of the person (in quotes): ', Name),
 	((
 		mark_person_by_name(Game, Name, NewGame),
 		string_concat('You have just marked person ', Name, Temp),
@@ -161,8 +158,7 @@ execute_game_action('mw', Game, NewGame, Flash, false) :-
 	get_murder_weapon(Game, MurderWeapon),
 	MurderWeapon=false,
 	!,
-	tab(2), prompt1('Please enter the name of the weapon (in quotes): '),
-	read(Name),
+	read_user_input('Please enter the name of the weapon (in quotes): ', Name),
 	((
 		mark_weapon_by_name(Game, Name, NewGame),
 		string_concat('You have just marked weapon ', Name, Temp),
@@ -177,8 +173,7 @@ execute_game_action('mr', Game, NewGame, Flash, false) :-
 	get_crime_scene(Game, CrimeScene),
 	CrimeScene=false,
 	!,
-	tab(2), prompt1('Please enter the name of the room (in quotes): '),
-	read(Name),
+	read_user_input('Please enter the name of the room (in quotes): ', Name),
 	((
 		mark_room_by_name(Game, Name, NewGame),
 		string_concat('You have just marked room ', Name, Temp),
@@ -191,8 +186,7 @@ execute_game_action('mr', Game, NewGame, Flash, false) :-
 execute_game_action('g', Game, NewGame, Flash, false) :-
 	is_game_started(Game),
 	!,
-	tab(2), prompt1('Please enter the name of the room (in quotes): '),
-	read(Name),
+	read_user_input('Please enter the name of the room (in quotes): ', Name),
 	((
 		set_current_room_by_name(Game, Name, NewGame),
 		string_concat('You have just gone to room ', Name, Temp),
